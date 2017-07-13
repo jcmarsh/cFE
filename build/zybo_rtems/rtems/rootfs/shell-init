@@ -1,0 +1,5 @@
+mkdir ram0
+mkdir ram
+mkrfs /dev/rd0
+mount -t rfs /dev/rd0 /ram0
+load /cf/cfe-core.slf go
