@@ -55,3 +55,6 @@
 [submodule "apps/voter"]
 	path = apps/voter
 	url = git@github.com:jcmarsh/voter.git
+[submodule "rki"]
+	path = rki
+	url = https://github.com/alanc98/rki.git
