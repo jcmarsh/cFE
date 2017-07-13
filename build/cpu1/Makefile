@@ -39,16 +39,13 @@
 #===============================================================================
 
 # List of apps/libs to include in the build
-THE_APPS := sample_lib sample_app
-THE_APPS += ci_lab to_lab sch_lab
-# THE_APPS += cfs_lib
-# THE_APPS += cf cs ds fm hk hs lc md mm sc sch
+THE_APPS := ping pong
+THE_APPS += sch_lab
 export THE_APPS
 
 # List of apps that include tables for the build
 THE_TBLS := 
 #THE_TBLS += ds fm hk lc sc sch
-#THE_TBLS += cf hs 
 export THE_TBLS
 
 #===============================================================================

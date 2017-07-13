@@ -1,8 +1,7 @@
-CFE_LIB, /cf/apps/sample_lib.so,  SAMPLE_LibInit,  SAMPLE_LIB,    0,   0,    0x0, 0;
-CFE_APP, /cf/apps/sample_app.so,  SAMPLE_AppMain,  SAMPLE_APP,   50,   8192, 0x0, 0;
-CFE_APP, /cf/apps/ci_lab.so,      CI_Lab_AppMain,  CI_LAB_APP,   60,   8192, 0x0, 0;
-CFE_APP, /cf/apps/to_lab.so,      TO_Lab_AppMain,  TO_LAB_APP,   70,   8192, 0x0, 0;
-CFE_APP, /cf/apps/sch_lab.so,     SCH_Lab_AppMain, SCH_LAB_APP,  80,   8192, 0x0, 0;
+CFE_APP, /cf/apps/sch_lab.so,     SCH_Lab_AppMain, SCH_LAB,  40,   8192, 0x0, 0;
+CFE_APP, /cf/apps/ping.so,        PING_AppMain,    PING,     80,   8192, 0x0, 0;
+CFE_APP, /cf/apps/pong.so,        PONG_AppMain,    PONG,     81,   8192, 0x0, 0;
+
 !
 ! Startup script fields:
 ! 1. Object Type      -- CFE_APP for an Application, or CFE_LIB for a library.

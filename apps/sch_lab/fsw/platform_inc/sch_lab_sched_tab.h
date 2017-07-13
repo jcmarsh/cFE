@@ -21,18 +21,8 @@
 /*
 ** Include headers for message IDs here
 */
-#include "ci_lab_msgids.h"
-#include "to_lab_msgids.h"
-
-#include "sample_app_msgids.h"
-
-#if 0
-#include "sc_msgids.h"
-#include "hs_msgids.h"
-#include "fm_msgids.h"
-#include "ds_msgids.h"
-#include "lc_msgids.h"
-#endif
+#include "ping_app_msgids.h"
+#include "pong_app_msgids.h"
 
 /*
 ** Defines
@@ -68,19 +58,7 @@ SCH_LAB_ScheduleTable_t SCH_LAB_ScheduleTable[SCH_LAB_MAX_SCHEDULE_ENTRIES] =
      { CFE_SB_SEND_HK_MID,   4, 0 },
      { CFE_TBL_SEND_HK_MID,  4, 0 },
      
-     { CI_LAB_SEND_HK_MID,   4, 0 },
-     { TO_LAB_SEND_HK_MID,   4, 0 },
-     { SAMPLE_APP_SEND_HK_MID,   4, 0 },
-
-#if 0
-     { SC_SEND_HK_MID,       4, 0 },
-     { SC_1HZ_WAKEUP_MID,    1, 0 },  /* Example of a 1hz packet */
-     { HS_SEND_HK_MID,       4, 0 },
-     { FM_SEND_HK_MID,       4, 0 },
-     { DS_SEND_HK_MID,       4, 0 },
-     { LC_SEND_HK_MID,       4, 0 },
-
-#endif
+     { PING_APP_1HZ_WAKEUP_MID,   1, 0 },
 
      { SCH_LAB_END_OF_TABLE, 0, 0 }
 };
