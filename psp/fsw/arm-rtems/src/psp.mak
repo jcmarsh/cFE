@@ -29,7 +29,7 @@ cfe_psp_ram.o \
 cfe_psp_eeprom.o \
 cfe_psp_port.o \
 cfe_psp_memrange.o \
-cfe_psp_memutils.o 
+cfe_psp_memutils.o
 
 #==============================================================================
 # Source files required to build subsystem; used to generate dependencies.
@@ -46,4 +46,4 @@ cfe_psp_ram.c \
 cfe_psp_eeprom.c \
 cfe_psp_port.c \
 cfe_psp_memrange.c \
-cfe_psp_memutils.c 
+cfe_psp_memutils.c

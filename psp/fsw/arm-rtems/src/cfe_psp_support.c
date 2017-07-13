@@ -26,24 +26,28 @@
 **  Include Files
 */
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
+#include <rtems.h>
 
 /*
 ** cFE includes
 */
-#include "common_types.h"
-#include "osapi.h"
-#include "cfe_es.h"            /* For reset types */
-#include "cfe_platform_cfg.h"  /* for processor ID */
-#include "cfe_mission_cfg.h"   /* for spacecraft ID */
+#include <osapi.h>
+#include <common_types.h>
+#include <cfe_es.h>            /* For reset types */
+#include <cfe_platform_cfg.h>  /* for processor ID */
+#include <cfe_mission_cfg.h>   /* for spacecraft ID */
 
 /*
 ** Types and prototypes for this module
 */
-#include "cfe_psp.h"
+#include <cfe_psp.h>
 #include "cfe_psp_memory.h"
 
+/*
+** Macro definitions
+*/
+#define CFE_PSP_PANIC_EXIT_DELAY_US 100000
 
 /******************************************************************************
 **  Function:  CFE_PSP_Restart()
@@ -60,23 +64,23 @@
 
 void CFE_PSP_Restart(uint32 reset_type)
 {
+  if (reset_type == CFE_ES_POWERON_RESET)
+  {
+    CFE_PSP_ReservedMemoryPtr->bsp_reset_type = CFE_ES_POWERON_RESET;
+    CFE_PSP_FlushCaches(1, (uint32)CFE_PSP_ReservedMemoryPtr,
+      sizeof(CFE_PSP_ReservedMemory_t));
+    /* reboot(BOOT_CLEAR); Need RTEMS equiv. */
+  }
+  else
+  {
+    CFE_PSP_ReservedMemoryPtr->bsp_reset_type = CFE_ES_PROCESSOR_RESET;
+    CFE_PSP_FlushCaches(1, (uint32)CFE_PSP_ReservedMemoryPtr,
+      sizeof(CFE_PSP_ReservedMemory_t));
+    /* reboot(BOOT_NORMAL); Need RTEMS Equiv */
+  }
 
-   if ( reset_type == CFE_ES_POWERON_RESET )
-   {
-      CFE_PSP_ReservedMemoryPtr->bsp_reset_type = CFE_ES_POWERON_RESET;
-      CFE_PSP_FlushCaches(1, (uint32 )CFE_PSP_ReservedMemoryPtr, sizeof(CFE_PSP_ReservedMemory_t));
-      /* reboot(BOOT_CLEAR); Need RTEMS equiv. */
-   }
-   else
-   {
-      CFE_PSP_ReservedMemoryPtr->bsp_reset_type = CFE_ES_PROCESSOR_RESET;
-      CFE_PSP_FlushCaches(1, (uint32 )CFE_PSP_ReservedMemoryPtr, sizeof(CFE_PSP_ReservedMemory_t));
-      /* reboot(BOOT_NORMAL); Need RTEMS Equiv */
-   }
-
-   OS_printf("CFE_PSP_Restart is not implemented on this platform ( yet ! )\n");
-   exit(-1);
-
+  printf("CFE_PSP_Restart is not implemented on this platform ( yet ! )\n");
+  CFE_PSP_Panic(CFE_PSP_PANIC_GENERAL_FAILURE);
 }
 
 /******************************************************************************
@@ -95,8 +99,11 @@ void CFE_PSP_Restart(uint32 reset_type)
 
 void CFE_PSP_Panic(int32 ErrorCode)
 {
-   printf("CFE_PSP_Panic Called with error code = 0x%08X. Exiting.\n",(unsigned int )ErrorCode);
-   exit(-1); /* Need to improve this */
+  printf("CFE_PSP_Panic Called with error code = %d. Exiting.\n",
+    (int)ErrorCode);
+  fflush(stdout);
+  usleep(CFE_PSP_PANIC_EXIT_DELAY_US);
+  exit(ErrorCode);
 }
 
 /******************************************************************************
@@ -106,23 +113,16 @@ void CFE_PSP_Panic(int32 ErrorCode)
 **    Provides a common interface to flush the processor caches. This routine
 **    is in the BSP because it is sometimes implemented in hardware and
 **    sometimes taken care of by the RTOS.
-**
-**  Arguments:
-**
-**  Return:
-**    (none)
 */
 
 void CFE_PSP_FlushCaches(uint32 type, uint32 address, uint32 size)
 {
-   if ( type == 1 )
-   {
-      /* cacheTextUpdate((void *)address, size); */
-   }
+  /* Types are not defined, ignore */
+  (void) type;
 
-   /* Paranoid, flush both */
-   rtems_cache_flush_multiple_data_lines((void *)address, size);
-   rtems_cache_invalidate_multiple_instruction_lines((void *)address, size);
+  /* Paranoid, flush both */
+  rtems_cache_flush_multiple_data_lines((void *)address, size);
+  rtems_cache_invalidate_multiple_instruction_lines((void *)address, size);
 }
 
 /*
@@ -131,22 +131,13 @@ void CFE_PSP_FlushCaches(uint32 type, uint32 address, uint32 size)
 ** Purpose:
 **         return the processor ID.
 **
-**
-** Parameters:
-**
-** Global Inputs: None
-**
-** Global Outputs: None
-**
-**
-**
 ** Return Values: Processor ID
 */
-uint32 CFE_PSP_GetProcessorId    (void)
-{
-    return(CFE_CPU_ID);
-}
 
+uint32 CFE_PSP_GetProcessorId(void)
+{
+  return CFE_CPU_ID;
+}
 
 /*
 ** Name: CFE_PSP_GetSpacecraftId
@@ -154,16 +145,9 @@ uint32 CFE_PSP_GetProcessorId    (void)
 ** Purpose:
 **         return the spacecraft ID.
 **
-** Parameters:
-**
-** Global Inputs: None
-**
-** Global Outputs: None
-**
-**
 ** Return Values: Spacecraft ID
 */
-uint32 CFE_PSP_GetSpacecraftId   (void)
+uint32 CFE_PSP_GetSpacecraftId(void)
 {
-   return(CFE_SPACECRAFT_ID);
+  return CFE_SPACECRAFT_ID;
 }

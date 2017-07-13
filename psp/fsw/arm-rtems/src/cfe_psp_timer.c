@@ -1,4 +1,4 @@
-/************************************************************************************************
+/*
 ** File:  cfe_psp_timer.c
 **
 **
@@ -13,52 +13,58 @@
 **
 **
 ** Purpose:
-**   This file contains glue routines between the cFE and the OS Board Support Package ( BSP ).
-**   The functions here allow the cFE to interface functions that are board and OS specific
-**   and usually dont fit well in the OS abstraction layer.
+**      This file contains glue routines between the cFE and the OS Board
+**      Support Package ( BSP ).  The functions here allow the cFE to interface
+**      functions that are board and OS specific and usually dont fit well in
+**      the OS abstraction layer.
 **
 ** History:
 **   2005/06/05  K.Audra    | Initial version,
 **
-*************************************************************************************************/
-
-/*
-**  Include Files
 */
 
 /*
 **  Include Files
 */
-#include <stdio.h>
-#include <stdlib.h>
+
+#include <time.h>
 
 /*
 ** cFE includes
 */
-#include "common_types.h"
-#include "osapi.h"
-#include "cfe_es.h"            /* For reset types */
-#include "cfe_platform_cfg.h"  /* for processor ID */
+#include <common_types.h>
+#include <osapi.h>
 
 /*
 ** Types and prototypes for this module
 */
-#include "cfe_psp.h"
+#include <cfe_psp.h>
 
+/*
+** Macro Definitions
+*/
 
-/******************* Macro Definitions ***********************/
-#define WATCHDOG_MIN_TIME   0
-#define WATCHDOG_MAX_TIME   0xFFFFFFFF
+/*
+** Low 32 tick resolution is 1 us with OSAL
+*/
+#define CFE_PSP_TIMER_LOW32_RESOLUTION 1000000
+/* The number at which the least significant 32 bits of the 64 bit time stamp
+** returned by CFE_PSP_Get_Timebase rolls over.  If the lower 32 bits rolls at
+** 1 second, then the CFE_PSP_TIMER_LOW32_ROLLOVER will be 1000000.  If the
+** lower 32 bits rolls at its maximum value (2^32) then
+** CFE_PSP_TIMER_LOW32_ROLLOVER will be 0.
+*/
+#define CFE_PSP_TIMER_LOW32_ROLLOVER CFE_PSP_TIMER_LOW32_RESOLUTION
 
-#define CFE_PSP_TIMER_TICKS_PER_SECOND       100    /* Resolution of the least significant 32 bits of the 64 bit
-                                                           time stamp returned by CFE_PSP_Get_Timebase in timer ticks per second.
-                                                           The timer resolution for accuracy should not be any slower than 1000000
-                                                           ticks per second or 1 us per tick */
-#define CFE_PSP_TIMER_LOW32_ROLLOVER         0           /* The number that the least significant 32 bits of the 64 bit
-                                                           time stamp returned by CFE_PSP_Get_Timebase rolls over.  If the lower 32
-                                                           bits rolls at 1 second, then the CFE_PSP_TIMER_LOW32_ROLLOVER will be 1000000.
-                                                           if the lower 32 bits rolls at its maximum value (2^32) then
-                                                           CFE_PSP_TIMER_LOW32_ROLLOVER will be 0. */
+/*
+** CFE_PSP_Get_Timer_Tick is not implemented due poor specifications, and lack
+** of usage in cFE and cFS
+*/
+
+/*
+** CFE_PSP_Get_Dec is not implemented due to poor specification, and lack of
+** usage in cFE and cFS.
+*/
 
 /******************************************************************************
 **  Function:  CFE_PSP_GetTime()
@@ -67,29 +73,9 @@
 **
 **  Arguments: LocalTime - where the time is returned through
 ******************************************************************************/
-
-void CFE_PSP_GetTime( OS_time_t *LocalTime)
+void CFE_PSP_GetTime(OS_time_t *LocalTime)
 {
-    OS_GetLocalTime(LocalTime);
-    
-}/* end CFE_PSP_GetLocalTime */
-
-/******************************************************************************
-**  Function:  CFE_PSP_Get_Timer_Tick()
-**
-**  Purpose:
-**    Provides a common interface to system clock tick. This routine
-**    is in the BSP because it is sometimes implemented in hardware and
-**    sometimes taken care of by the RTOS.
-**
-**  Arguments:
-**
-**  Return:
-**  OS system clock ticks per second
-*/
-uint32 CFE_PSP_Get_Timer_Tick(void)
-{
-   return (0);
+  OS_GetLocalTime(LocalTime);
 }
 
 /******************************************************************************
@@ -104,12 +90,13 @@ uint32 CFE_PSP_Get_Timer_Tick(void)
 **  Arguments:
 **
 **  Return:
-**    The number of timer ticks per second of the time stamp returned
-**    by CFE_PSP_Get_Timebase
+**    The number of ticks in the lower 32bits of a time stamp retrieved by
+**    CFE_PSP_Get_Timebase which represent one second. Each "tick" is one
+**    increment.
 */
 uint32 CFE_PSP_GetTimerTicksPerSecond(void)
 {
-    return(CFE_PSP_TIMER_TICKS_PER_SECOND);
+  return CFE_PSP_TIMER_LOW32_RESOLUTION;
 }
 
 /******************************************************************************
@@ -125,12 +112,12 @@ uint32 CFE_PSP_GetTimerTicksPerSecond(void)
 **  Arguments:
 **
 **  Return:
-**    The number that the least significant 32 bits of the 64 bit time stamp
-**    returned by CFE_PSP_Get_Timebase rolls over.
+**    The number at which the least significant 32 bits of the 64 bit time
+**    stamp returned by CFE_PSP_Get_Timebase rolls over.
 */
 uint32 CFE_PSP_GetTimerLow32Rollover(void)
 {
-    return(CFE_PSP_TIMER_LOW32_ROLLOVER);
+  return CFE_PSP_TIMER_LOW32_ROLLOVER;
 }
 
 /******************************************************************************
@@ -142,34 +129,14 @@ uint32 CFE_PSP_GetTimerLow32Rollover(void)
 **    sometimes taken care of by the RTOS.
 **
 **  Arguments:
-**
-**  Return:
-**  Timebase register value
+**    Tbu: Timebase upper value (seconds)
+**    Tbl: Timebase lower value (microseconds)
 */
 void CFE_PSP_Get_Timebase(uint32 *Tbu, uint32* Tbl)
 {
-   OS_time_t        time;
+  OS_time_t time;
 
-   OS_GetLocalTime(&time);
-   *Tbu = time.seconds;
-   *Tbl = time.microsecs;
-}
-
-/******************************************************************************
-**  Function:  CFE_PSP_Get_Dec()
-**
-**  Purpose:
-**    Provides a common interface to decrementer counter. This routine
-**    is in the BSP because it is sometimes implemented in hardware and
-**    sometimes taken care of by the RTOS.
-**
-**  Arguments:
-**
-**  Return:
-**  Timebase register value
-*/
-
-uint32 CFE_PSP_Get_Dec(void)
-{
-   return(0);
+  OS_GetLocalTime(&time);
+  *Tbu = time.seconds;
+  *Tbl = time.microsecs;
 }

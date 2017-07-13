@@ -13,9 +13,10 @@
 **
 **
 ** Purpose:
-**   This file contains glue routines between the cFE and the OS Board Support Package ( BSP ).
-**   The functions here allow the cFE to interface functions that are board and OS specific
-**   and usually dont fit well in the OS abstraction layer.
+**   This file contains glue routines between the cFE and the OS Board Support
+**   Package ( BSP ).  The functions here allow the cFE to interface functions
+**   that are board and OS specific and usually dont fit well in the OS
+**   abstraction layer.
 **
 ** History:
 **   2005/06/05  Alan Cudmore    | Initial version,
@@ -31,39 +32,33 @@
 /*
 ** cFE includes
 */
-#include "common_types.h"
-#include "osapi.h"
-#include "cfe_es.h"            /* For reset types */
-#include "cfe_platform_cfg.h"  /* for processor ID */
-#include "cfe_mission_cfg.h"   /* for spacecraft ID */
+#include <common_types.h>
+#include <osapi.h>
 
 /*
 ** Types and prototypes for this module
 */
-#include "cfe_psp.h"
-#include "cfe_psp_memory.h"
+#include <cfe_psp.h>
 
 /******************************************************************************
 **  Function:  CFE_PSP_InitSSR
 **
 **  Purpose:
-**    Initializes the Solid State Recorder device. Dummy function for this 
+**    Initializes the Solid State Recorder device. Dummy function for this
 **    platform.
-**
 **
 **  Arguments:
 **    bus, device, device name
 **
 **  Return:
-**    (none)
+**    CFE_PSP_ERROR on failure, CFE_PSP_SUCCESS on success
 */
-
 int32 CFE_PSP_InitSSR(uint32 bus, uint32 device, char *DeviceName )
 {
-   int32     ReturnCode;
+  /* Not implemented */
+  (void) bus;
+  (void) device;
+  (void) DeviceName;
 
-   ReturnCode = CFE_PSP_SUCCESS;
-
-   return(ReturnCode);   
+  return CFE_PSP_ERROR;
 }
-
