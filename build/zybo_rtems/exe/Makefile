@@ -34,16 +34,16 @@ ARCH  = arm-rtems4.11
 
 CFE_CORE_ADDRESS = 0x01000000
 
-SCH_LAB_ADDRESS    = CFE_CORE_ADDRESS + 0x02100000
+SCH_LAB_ADDRESS    = 0x03100000
 SCH_LAB_ENTRYPT    = SCH_Lab_AppMain
 
-#BUZZ_ADDRESS       = CFE_CORE_ADDRESS + 0x02200000
+#BUZZ_ADDRESS       = 0x03200000
 #BUZZ_ENTRYPT       = TO_Lab_AppMain
 
-PING_ADDRESS       = CFE_CORE_ADDRESS + 0x02300000
+PING_ADDRESS       = 0x03300000
 PING_ENTRYPT       = SCH_AppMain
 
-PONG_ADDRESS       = CFE_CORE_ADDRESS + 0x02400000
+PONG_ADDRESS       = 0x03400000
 PONG_ENTRYPT       = PONG_AppMain
 
 ##
@@ -138,7 +138,7 @@ cfe-core.size: $(CFE_CORE_TARGET)
 ## 
 ## CFS Application link rules
 ## 
-sch_lab.slf: $(CFE_CORE_TARGET) ../ci_lab/sch_lab.o 
+sch_lab.slf: $(CFE_CORE_TARGET) ../sch_lab/sch_lab.o 
 	$(LINKER) $(APP_LD_FLAGS) -Ttext $(SCH_LAB_ADDRESS) -e$(SCH_LAB_ENTRYPT) -o sch_lab.elf ../sch_lab/sch_lab.o 
 	$(ELF2STATICLOAD)  --object_name="SCH_LAB"   --entry_point_name="SCH_Lab_AppMain"  sch_lab.elf sch_lab.slf
 

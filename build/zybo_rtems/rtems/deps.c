@@ -19,14 +19,18 @@
 #include <strings.h>
 #include <dirent.h>
 
-extern int sleep;
+#include <semaphore.h>
+#include <pthread.h>
+#include <mqueue.h>
+#include <dlfcn.h>
+#include <sched.h>
+
 extern int __gesf2;
 extern int __gtsf2;
 extern int __lesf2;
 extern int __ltsf2;
 extern int __divsf3;
 extern int __fixunssfsi;
-extern int sysconf;
 
 /*
 ** Declare the reference to the functions to pull them in
@@ -92,4 +96,58 @@ int rtems_timer_delete_ptr = (int)&rtems_timer_delete;
 int strstr_ptr = (int)&strstr;
 int bzero_ptr = (int)&bzero;
 int rtems_io_register_driver_ptr = (int)&rtems_io_register_driver;
+
+// Is this really needed here?
+int rtems_timer_server_fire_after_ptr = (int)&rtems_timer_server_fire_after;
+int rtems_timer_initiate_server_ptr = (int)&rtems_timer_initiate_server;
+
+int sem_init_ptr = (int)&sem_init;
+int sem_trywait_ptr = (int)&sem_trywait;
+int sem_destroy_ptr = (int)&sem_destroy;
+int sem_getvalue_ptr = (int)&sem_getvalue;
+int sem_post_ptr = (int)&sem_post;
+
+int sigfillset_ptr = (int)&sigfillset;
+int sigdelset_ptr = (int)&sigdelset;
+int sigsuspend_ptr = (int)&sigsuspend;
+
+int sched_get_priority_max_ptr = (int)&sched_get_priority_max;
+int sched_get_priority_min_ptr = (int)&sched_get_priority_min;
+
+int pthread_mutexattr_settype_ptr = (int)&pthread_mutexattr_settype;
+int pthread_getschedparam_ptr = (int)&pthread_getschedparam;
+int pthread_setschedparam_ptr = (int)&pthread_setschedparam;
+int pthread_attr_init_ptr = (int)&pthread_attr_init;
+int pthread_attr_setinheritsched_ptr = (int)&pthread_attr_setinheritsched;
+int pthread_attr_setstacksize_ptr = (int)&pthread_attr_setstacksize;
+int pthread_attr_setschedpolicy_ptr = (int)&pthread_attr_setschedpolicy;
+int pthread_attr_setschedparam_ptr = (int)&pthread_attr_setschedparam;
+int pthread_create_ptr = (int)&pthread_create;
+int pthread_detach_ptr = (int)&pthread_detach;
+int pthread_attr_destroy_ptr = (int)&pthread_attr_destroy;
+int pthread_cancel_ptr = (int)&pthread_cancel;
+int pthread_cond_signal_ptr = (int)&pthread_cond_signal;
+int pthread_cond_timedwait_ptr = (int)&pthread_cond_timedwait;
+int pthread_equal_ptr = (int)&pthread_equal;
+
+int dlerror_ptr = (int)&dlerror;
+int dlsym_ptr = (int)&dlsym;
+int dlopen_ptr = (int)&dlopen;
+int dlinfo_ptr = (int)&dlinfo;
+int dlclose_ptr = (int)&dlclose;
+
+int mq_open_ptr = (int)&mq_open;
+int mq_close_ptr = (int)&mq_close;
+int mq_unlink_ptr = (int)&mq_unlink;
+int mq_receive_ptr = (int)&mq_receive;
+int mq_getattr_ptr = (int)&mq_getattr;
+int mq_timedreceive_ptr = (int)&mq_timedreceive;
+int mq_send_ptr = (int)&mq_send;
+
+int timer_create_ptr = (int)&timer_create;
+int timer_settime_ptr = (int)&timer_settime;
+int timer_delete_ptr = (int)&timer_delete;
+int clock_getres_ptr = (int)&clock_getres;
+
+//int _ptr = (int)&;
 
