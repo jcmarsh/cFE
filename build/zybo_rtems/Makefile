@@ -104,10 +104,11 @@ all:: cfs_envs cfs_inbuild cfs_postbuild
 config:: cfs_envs cfs_prebuild cfs_tool
 
 clean:: cfs_clean
+	make -C ./exe clean
 
 distclean:: cfs_realclean cfs_cleantool
 
-realclean:: cfs_realclean cfs_cleantool
+realclean:: cfs_realclean cfs_cleantool clean
 
 #===============================================================================
 # Supplemental makefile(s)

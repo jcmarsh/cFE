@@ -171,4 +171,4 @@ clean::
 	-$(RM) *.o
 	-$(RM) *.s3r
 	-$(RM) *.img
-
+	-$(RM) map.txt
