@@ -7,17 +7,17 @@
 ##
 ###############################################################################
 
-## 
+##
 ## Warning Level Configuration
 ##
 ## WARNINGS=-Wall -ansi -pedantic -Wstrict-prototypes
-WARNINGS	= -Wall 
+WARNINGS	= -Wall
 
-SYSINCS = 
+SYSINCS =
 
 ##
 ## RTEMS Configuration
-## 
+##
 RTEMS_VER=4.11
 RTEMS_BASE=/home/jcmarsh/research/$(RTEMS_VER)
 RTEMS_BSP=arm-rtems$(RTEMS_VER)/xilinx_zynq_zybo
@@ -29,33 +29,33 @@ RTEMS_BSP_DIR=$(RTEMS_BASE)/$(RTEMS_BSP)
 TARGET_DEFS=-D$(OS) -DBUILD=$(BUILD) -D_REENTRANT -D_EMBED_ -D_GNU_SOURCE
 TARGET_DEFS+=--pipe -B$(RTEMS_BSP_DIR)/lib/ -specs bsp_specs -qrtems
 TARGET_DEFS+=-mlong-calls -std=gnu99 -O0 -g
-#TARGET_DEFS = -D_RTEMS_OS_ -DOS_HWARCH=$(HWARCH) $(CFE_SB_NET) -D$(OS) -D_EMBED_
+#TARGET_DEFS = -D_RTEMS_OS_ -DOS_HWARCH=$(HWARCH) -D$(OS) -D_EMBED_
 
-## 
+##
 ## Endian Defines
 ##
 ENDIAN_DEFS=-D_EL -DENDIAN=_EL -DSOFTWARE_LTTILE_BIT_ORDER
 
 ##
 ## Compiler Architecture Switches ( double check arch switch -m52xx, m523x etc.. )
-## 
+##
 ARCH_OPTS=-march=armv7-a -mthumb -mfpu=neon -mfloat-abi=hard -mtune=cortex-a9
 
 ##
-## Application specific compiler switches 
+## Application specific compiler switches
 ##
 ifeq ($(BUILD_TYPE),CFE_APP)
-   APP_COPTS =   
+   APP_COPTS =
    APP_ASOPTS   =
 else
-   APP_COPTS =  
+   APP_COPTS =
    APP_ASOPTS   =
 endif
 
 ##
 ## Extra Cflags for Assembly listings, etc.
 ##
-#LIST_OPTS    = -Wa,-a=$*.lis 
+LIST_OPTS    = -Wa,-a=$*.lis
 
 ##
 ## gcc options for dependancy generation

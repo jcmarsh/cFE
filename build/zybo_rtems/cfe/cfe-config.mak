@@ -30,4 +30,3 @@ OS = posix
 ## PSP -- CFE Platform Support Package
 ##---------------------------------------------------------
 PSP = arm-rtems
-

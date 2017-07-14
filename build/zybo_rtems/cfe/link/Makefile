@@ -72,4 +72,3 @@ clean:
 	-$(RM) vxWorks*
 	-$(RM) *.bin
 
-   
