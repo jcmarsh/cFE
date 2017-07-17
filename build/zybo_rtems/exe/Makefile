@@ -41,7 +41,7 @@ SCH_LAB_ENTRYPT    = SCH_Lab_AppMain
 #BUZZ_ENTRYPT       = TO_Lab_AppMain
 
 PING_ADDRESS       = 0x03300000
-PING_ENTRYPT       = SCH_AppMain
+PING_ENTRYPT       = PING_AppMain
 
 PONG_ADDRESS       = 0x03400000
 PONG_ENTRYPT       = PONG_AppMain
@@ -138,24 +138,24 @@ cfe-core.size: $(CFE_CORE_TARGET)
 ## 
 ## CFS Application link rules
 ## 
-sch_lab.slf: $(CFE_CORE_TARGET) ../sch_lab/sch_lab.o 
-	$(LINKER) $(APP_LD_FLAGS) -Ttext $(SCH_LAB_ADDRESS) -e$(SCH_LAB_ENTRYPT) -o sch_lab.elf ../sch_lab/sch_lab.o 
+sch_lab.slf: $(CFE_CORE_TARGET) ../sch_lab/sch_lab.o
+	$(LINKER) $(APP_LD_FLAGS) -Ttext $(SCH_LAB_ADDRESS) -e$(SCH_LAB_ENTRYPT) -o sch_lab.elf ../sch_lab/sch_lab.o
 	$(ELF2STATICLOAD)  --object_name="SCH_LAB"   --entry_point_name="SCH_Lab_AppMain"  sch_lab.elf sch_lab.slf
 
 sch_lab.size: sch_lab.slf
 	$(SIZE) sch_lab.elf
 	@echo ------------------------------------------------------------------
 
-ping.slf: $(CFE_CORE_TARGET) ping.slf  ../ping/ping_app.o 
-	$(LINKER) $(APP_LD_FLAGS) -Ttext $(TO_ADDRESS) -e$(TO_ENTRYPT) -o ping.elf ../ping/ping_app.o 
+ping.slf: $(CFE_CORE_TARGET) ping.slf  ../ping/ping_app.o
+	$(LINKER) $(APP_LD_FLAGS) -Ttext $(PING_ADDRESS) -e$(PING_ENTRYPT) -o ping.elf ../ping/ping_app.o
 	$(ELF2STATICLOAD)  --object_name="PING"  --entry_point_name="PING_AppMain"  ping.elf ping.slf
 
 ping.size: ping.slf
 	$(SIZE) ping.elf
 	@echo ------------------------------------------------------------------
 
-pong.slf: $(CFE_CORE_TARGET) pong.slf  ../pong/pong_app.o 
-	$(LINKER) $(APP_LD_FLAGS) -Ttext $(TO_ADDRESS) -e$(TO_ENTRYPT) -o pong.elf ../pong/pong_app.o 
+pong.slf: $(CFE_CORE_TARGET) pong.slf  ../pong/pong_app.o
+	$(LINKER) $(APP_LD_FLAGS) -Ttext $(PONG_ADDRESS) -e$(PONG_ENTRYPT) -o pong.elf ../pong/pong_app.o
 	$(ELF2STATICLOAD)  --object_name="PONG"  --entry_point_name="PONG_AppMain"  pong.elf pong.slf
 
 pong.size: pong.slf

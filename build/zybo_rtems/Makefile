@@ -109,6 +109,7 @@ clean:: cfs_clean
 distclean:: cfs_realclean cfs_cleantool
 
 realclean:: cfs_realclean cfs_cleantool clean
+	rm -rf ../../osal/build/inc
 
 #===============================================================================
 # Supplemental makefile(s)
