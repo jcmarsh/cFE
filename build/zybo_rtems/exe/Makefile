@@ -105,6 +105,7 @@ imfsfilesys: cfe apps
 	cp ping.slf ../rtems/rootfs/cf
 	cp pong.slf    ../rtems/rootfs/cf
 	cp cfe_es_startup.scr ../rtems/rootfs/cf
+	echo "test" > test.tbl
 	cp *.tbl ../rtems/rootfs/cf
 
 ##
