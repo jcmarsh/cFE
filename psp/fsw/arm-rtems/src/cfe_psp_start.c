@@ -51,7 +51,6 @@
 #include <cfe_platform_cfg.h>  /* for processor ID */
 #include <cfe_psp.h>
 #include "cfe_psp_memory.h"
-#include "cfe_files_tar.h"
 
 /*
 ** Enable watchdog. Uncomment only if the system has the FPGA core available,
@@ -164,17 +163,6 @@ void CFE_PSP_Main(uint32 ModeId, char *StartupFilePath)
    if (os_status != OS_SUCCESS)
      printf("CFE_PSP: OS_API_Init() failed: %ld\n", os_status);
    /* FIXME: Isn't this fatal? */
-
-   /*
-   ** Populate root filesystem with cFE files
-   */
-   chdir("/");
-   RtemsStatus = Untar_FromMemory((void *)cfe_files_tar,
-     sizeof(cfe_files_tar));
-   if (RtemsStatus != RTEMS_SUCCESSFUL)
-   {
-     printf("CFE_PSP: Error: Unable to untar cFE files\n");
-   }
 
    /*
    ** Allocate memory for the cFE memory. Note that this is malloced on
