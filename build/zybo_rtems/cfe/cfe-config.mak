@@ -24,7 +24,7 @@
 ## Operating System
 ## OS = The operating system selected for the Abstraction implementation
 ##---------------------------------------------------------
-OS = posix
+OS = rtems
 
 ##---------------------------------------------------------
 ## PSP -- CFE Platform Support Package

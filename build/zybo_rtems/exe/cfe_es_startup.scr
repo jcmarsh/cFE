@@ -1,6 +1,6 @@
-CFE_APP, /cf/apps/sch_lab.so,     SCH_Lab_AppMain, SCH_LAB,  40,   8192, 0x0, 0;
-CFE_APP, /cf/apps/ping.so,        PING_AppMain,    PING,     80,   8192, 0x0, 0;
-CFE_APP, /cf/apps/pong.so,        PONG_AppMain,    PONG,     81,   8192, 0x0, 0;
+CFE_APP, /cf/apps/sch_lab.slf,     SCH_Lab_AppMain, SCH_LAB,  40,   8192, 0x0, 0;
+CFE_APP, /cf/apps/ping.slf,        PING_AppMain,    PING,     80,   8192, 0x0, 0;
+CFE_APP, /cf/apps/pong.slf,        PONG_AppMain,    PONG,     81,   8192, 0x0, 0;
 
 !
 ! Startup script fields:

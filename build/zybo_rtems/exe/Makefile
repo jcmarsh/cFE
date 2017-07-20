@@ -101,9 +101,9 @@ sizes: cfe-core.size sch_lab.size ping.size pong.size
 
 imfsfilesys: cfe apps
 	cp cfe-core.slf ../rtems/rootfs/cf
-	cp sch_lab.slf ../rtems/rootfs/cf
-	cp ping.slf ../rtems/rootfs/cf
-	cp pong.slf    ../rtems/rootfs/cf
+	cp sch_lab.slf ../rtems/rootfs/cf/apps
+	cp ping.slf ../rtems/rootfs/cf/apps
+	cp pong.slf    ../rtems/rootfs/cf/apps
 	cp cfe_es_startup.scr ../rtems/rootfs/cf
 	echo "test" > test.tbl
 	cp *.tbl ../rtems/rootfs/cf
