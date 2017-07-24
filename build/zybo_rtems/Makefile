@@ -39,7 +39,7 @@
 #===============================================================================
 
 # List of apps/libs to include in the build
-THE_APPS := ping pong
+THE_APPS := voter ping pong pong_r1 pong_r2 pong_r3
 THE_APPS += sch_lab
 export THE_APPS
 

@@ -125,7 +125,7 @@ void *POSIX_Init(void *arg)
 {
    (void) arg;
 
-   CFE_PSP_Main(1, "/cf/apps/cfe_es_startup.scr");
+   CFE_PSP_Main(1, "/cf/cfe_es_startup.scr");
 
    /*
    ** Return to the shell/monitor

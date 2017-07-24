@@ -5,5 +5,8 @@ mount -t rfs /dev/ramdisk /ramdev0
 
 load /cf/apps/sch_lab.slf
 load /cf/apps/ping.slf
-load /cf/apps/pong.slf
+load /cf/apps/voter.slf
+load /cf/apps/pong_r1.slf
+load /cf/apps/pong_r2.slf
+load /cf/apps/pong_r3.slf
 load /cf/cfe-core.slf go

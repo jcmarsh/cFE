@@ -150,4 +150,3 @@ int timer_delete_ptr = (int)&timer_delete;
 int clock_getres_ptr = (int)&clock_getres;
 
 //int _ptr = (int)&;
-

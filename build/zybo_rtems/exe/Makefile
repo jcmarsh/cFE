@@ -38,12 +38,25 @@ SCH_LAB_ADDRESS    = 0x03100000
 SCH_LAB_ENTRYPT    = SCH_Lab_AppMain
 
 #BUZZ_ADDRESS       = 0x03200000
-#BUZZ_ENTRYPT       = TO_Lab_AppMain
+#BUZZ_ENTRYPT       = BUZZ_AppMain
 
 PING_ADDRESS       = 0x03300000
 PING_ENTRYPT       = PING_AppMain
 
-PONG_ADDRESS       = 0x03400000
+VOTER_ADDRESS      = 0x03400000
+VOTER_ENTRYPT      = VOTER_AppMain
+
+PONG_R1_ADDRESS    = 0x03500000
+PONG_R1_ENTRYPT    = PONG_R1_AppMain
+
+PONG_R2_ADDRESS    = 0x03600000
+PONG_R2_ENTRYPT    = PONG_R2_AppMain
+
+PONG_R3_ADDRESS    = 0x03700000
+PONG_R3_ENTRYPT    = PONG_R3_AppMain
+
+# Adding to avoid compilation errors, but not run
+PONG_ADDRESS       = 0x03800000
 PONG_ENTRYPT       = PONG_AppMain
 
 ##
@@ -95,14 +108,18 @@ cfe::$(CFE_CORE_TARGET)
 #libs: cfs_lib.slf 
 libs:
 
-apps: sch_lab.slf ping.slf pong.slf
+apps: sch_lab.slf ping.slf voter.slf pong_r1.slf pong_r2.slf pong_r3.slf pong.slf
 
-sizes: cfe-core.size sch_lab.size ping.size pong.size
+sizes: cfe-core.size sch_lab.size ping.size voter.size pong_r1.size pong_r2.size pong_r3.size pong.size
 
 imfsfilesys: cfe apps
 	cp cfe-core.slf ../rtems/rootfs/cf
 	cp sch_lab.slf ../rtems/rootfs/cf/apps
 	cp ping.slf ../rtems/rootfs/cf/apps
+	cp voter.slf    ../rtems/rootfs/cf/apps
+	cp pong_r1.slf    ../rtems/rootfs/cf/apps
+	cp pong_r2.slf    ../rtems/rootfs/cf/apps
+	cp pong_r3.slf    ../rtems/rootfs/cf/apps
 	cp pong.slf    ../rtems/rootfs/cf/apps
 	cp cfe_es_startup.scr ../rtems/rootfs/cf
 	echo "test" > test.tbl
@@ -153,6 +170,38 @@ ping.slf: $(CFE_CORE_TARGET) ping.slf  ../ping/ping_app.o
 
 ping.size: ping.slf
 	$(SIZE) ping.elf
+	@echo ------------------------------------------------------------------
+
+voter.slf: $(CFE_CORE_TARGET) voter.slf  ../voter/voter_app.o
+	$(LINKER) $(APP_LD_FLAGS) -Ttext $(VOTER_ADDRESS) -e$(VOTER_ENTRYPT) -o voter.elf ../voter/voter_app.o ../voter/voter_generated.o
+	$(ELF2STATICLOAD)  --object_name="VOTER"  --entry_point_name="VOTER_AppMain"  voter.elf voter.slf
+
+voter.size: voter.slf
+	$(SIZE) voter.elf
+	@echo ------------------------------------------------------------------
+
+pong_r1.slf: $(CFE_CORE_TARGET) pong_r1.slf  ../pong_r1/pong_r1_app.o
+	$(LINKER) $(APP_LD_FLAGS) -Ttext $(PONG_R1_ADDRESS) -e$(PONG_R1_ENTRYPT) -o pong_r1.elf ../pong_r1/pong_r1_app.o
+	$(ELF2STATICLOAD)  --object_name="PONG_R1"  --entry_point_name="PONG_R1_AppMain"  pong_r1.elf pong_r1.slf
+
+pong_r1.size: pong_r1.slf
+	$(SIZE) pong_r1.elf
+	@echo ------------------------------------------------------------------
+
+pong_r2.slf: $(CFE_CORE_TARGET) pong_r2.slf  ../pong_r2/pong_r2_app.o
+	$(LINKER) $(APP_LD_FLAGS) -Ttext $(PONG_R2_ADDRESS) -e$(PONG_R2_ENTRYPT) -o pong_r2.elf ../pong_r2/pong_r2_app.o
+	$(ELF2STATICLOAD)  --object_name="PONG_R2"  --entry_point_name="PONG_R2_AppMain"  pong_r2.elf pong_r2.slf
+
+pong_r2.size: pong_r2.slf
+	$(SIZE) pong_r2.elf
+	@echo ------------------------------------------------------------------
+
+pong_r3.slf: $(CFE_CORE_TARGET) pong_r3.slf  ../pong_r3/pong_r3_app.o
+	$(LINKER) $(APP_LD_FLAGS) -Ttext $(PONG_R3_ADDRESS) -e$(PONG_R3_ENTRYPT) -o pong_r3.elf ../pong_r3/pong_r3_app.o
+	$(ELF2STATICLOAD)  --object_name="PONG_R3"  --entry_point_name="PONG_R3_AppMain"  pong_r3.elf pong_r3.slf
+
+pong_r3.size: pong_r3.slf
+	$(SIZE) pong_r3.elf
 	@echo ------------------------------------------------------------------
 
 pong.slf: $(CFE_CORE_TARGET) pong.slf  ../pong/pong_app.o
