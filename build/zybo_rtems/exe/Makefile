@@ -34,8 +34,8 @@ ARCH  = arm-rtems4.11
 
 CFE_CORE_ADDRESS = 0x01000000
 
-SCH_LAB_ADDRESS    = 0x03100000
-SCH_LAB_ENTRYPT    = SCH_Lab_AppMain
+SCH_ADDRESS    = 0x03100000
+SCH_ENTRYPT    = SCH_AppMain
 
 #BUZZ_ADDRESS       = 0x03200000
 #BUZZ_ENTRYPT       = TO_Lab_AppMain
@@ -95,18 +95,17 @@ cfe::$(CFE_CORE_TARGET)
 #libs: cfs_lib.slf 
 libs:
 
-apps: sch_lab.slf ping.slf pong.slf
+apps: sch.slf ping.slf pong.slf
 
-sizes: cfe-core.size sch_lab.size ping.size pong.size
+sizes: cfe-core.size sch.size ping.size pong.size
 
 imfsfilesys: cfe apps
 	cp cfe-core.slf ../rtems/rootfs/cf
-	cp sch_lab.slf ../rtems/rootfs/cf/apps
+	cp sch.slf ../rtems/rootfs/cf/apps
 	cp ping.slf ../rtems/rootfs/cf/apps
 	cp pong.slf    ../rtems/rootfs/cf/apps
 	cp cfe_es_startup.scr ../rtems/rootfs/cf
-	echo "test" > test.tbl
-	cp *.tbl ../rtems/rootfs/cf
+	cp ../sch/*.tbl ../rtems/rootfs/cf
 
 ##
 ## The filesys target is the EEPROM file system image.
@@ -139,12 +138,12 @@ cfe-core.size: $(CFE_CORE_TARGET)
 ## 
 ## CFS Application link rules
 ## 
-sch_lab.slf: $(CFE_CORE_TARGET) ../sch_lab/sch_lab.o
-	$(LINKER) $(APP_LD_FLAGS) -Ttext $(SCH_LAB_ADDRESS) -e$(SCH_LAB_ENTRYPT) -o sch_lab.elf ../sch_lab/sch_lab.o
-	$(ELF2STATICLOAD)  --object_name="SCH_LAB"   --entry_point_name="SCH_Lab_AppMain"  sch_lab.elf sch_lab.slf
+sch.slf: $(CFE_CORE_TARGET) ../sch/sch.o
+	$(LINKER) $(APP_LD_FLAGS) -Ttext $(SCH_ADDRESS) -e$(SCH_ENTRYPT) -o sch.elf ../sch/sch.o ../sch/sch_api.o # ../sch/sch_cmds.o ../sch/sch_custom.o
+	$(ELF2STATICLOAD)  --object_name="SCH"   --entry_point_name="SCH_AppMain"  sch.elf sch.slf
 
-sch_lab.size: sch_lab.slf
-	$(SIZE) sch_lab.elf
+sch.size: sch.slf
+	$(SIZE) sch.elf
 	@echo ------------------------------------------------------------------
 
 ping.slf: $(CFE_CORE_TARGET) ping.slf  ../ping/ping_app.o

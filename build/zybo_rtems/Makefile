@@ -40,11 +40,11 @@
 
 # List of apps/libs to include in the build
 THE_APPS := ping pong
-THE_APPS += sch_lab
+THE_APPS += sch
 export THE_APPS
 
 # List of apps that include tables for the build
-THE_TBLS :=
+THE_TBLS := sch
 export THE_TBLS
 
 #===============================================================================
